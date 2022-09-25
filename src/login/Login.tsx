@@ -5,23 +5,29 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { createSignal } from 'solid-js';
 import { Spinner } from '../assets/Spinner';
 import { sendNotification } from '@tauri-apps/api/notification';
+import { useNavigate } from '@solidjs/router';
 
 export default function LoginPage() {
 
 	const [user, setUser] = createSignal('');
 	const [password, setPassword] = createSignal('');
 	const [loading, setLoading] = createSignal(false);
+	const navigate = useNavigate();
 
 	const sendLogin = async () => {
-
-
 		setLoading(true);
 		const response = await invoke('login', {username: user(), password: password()});
+		setLoading(false);
 		if (!response) {
 			sendNotification('Identificación fallida.');
+			// TODO: Toast??? nose 
+			invoke('log', {data: 'Identificación fallida.'});
+
+		} else {
+			invoke('log', {data: `${response}`});
+			navigate('/home');
 		}
-		setLoading(false);
-		await invoke('log', {data: `${response}`});
+		
 	};
 	return (
 		<div class="container md:mx-auto flex w-screen h-screen justify-center content-center items-center">
