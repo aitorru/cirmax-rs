@@ -25,7 +25,11 @@ export default function Config() {
 					</button>
 					<div class="flex-grow"></div>
 					<button class="rounded-l p-2 bg-teal-700 disabled:bg-teal-700/50 text-white font-bold" disabled={!isEditing() ? true : false}>Validar</button>
-					<button class="rounded-r p-2 bg-red-700 disabled:bg-red-700/50 text-white font-bold" disabled={!isEditing() ? true : false}>Cancelar</button>
+					<button class="rounded-r p-2 bg-red-700 disabled:bg-red-700/50 text-white font-bold" 
+						disabled={!isEditing() ? true : false} 
+						onclick={() => setIsEditing(false)}>
+						Cancelar
+					</button>
 					<button class="ml-5 p-2 px-5 float-right rounded text-white font-bold bg-red-700 disabled:bg-red-700/50" disabled={isEditing() ? true : false}>Salir</button>
 				</div>
 			</div>

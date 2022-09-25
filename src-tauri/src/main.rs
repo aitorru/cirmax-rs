@@ -23,7 +23,7 @@ lazy_static! {
     static ref LOGGED_IN: Mutex<Vec<bool>> = Mutex::new(vec![false]);
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn login(username: &str, password: &str) -> bool {
     // Importar el esquema para poder obtener los datos
     // use self::schema::posts::dsl::*;
