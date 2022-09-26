@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 use bcrypt::verify;
-use cirmax::*;
+use cirmax::{models::Empresa, *};
 use diesel::prelude::*;
 use lazy_static::lazy_static; // 1.4.0
 use log::{debug, error, info, trace, warn, LevelFilter};
@@ -55,6 +55,21 @@ fn login(username: &str, password: &str) -> bool {
     return true;
 }
 
+#[tauri::command(async)]
+fn get_empresa_by_id(id_empresa: String) -> Vec<Empresa> {
+    debug!("Obteniendo empresa por id");
+
+    trace!("Id: {}", id_empresa);
+    use self::schema::empresa::dsl::*;
+    let connection = &mut establish_connection();
+
+    let result = empresa
+        .filter(idclinica.eq(id_empresa))
+        .load::<Empresa>(connection)
+        .expect("Error obteniendo empresa");
+    return result;
+}
+
 #[cfg(debug_assertions)]
 #[tauri::command]
 fn log(data: &str) {
@@ -68,12 +83,16 @@ fn log(_data: &str) {}
 fn main() {
     // Build the logger
     #[cfg(debug_assertions)]
-    let level = log::LevelFilter::Info;
+    let level = log::LevelFilter::Trace;
 
     #[cfg(not(debug_assertions))]
-    let level = log::LevelFilter::Warn;
+    let level = log::LevelFilter::Error;
 
+    #[cfg(unix)]
     let file_path = "/tmp/cirmax-rs.log";
+
+    #[cfg(windows)]
+    let file_path = "C:/tmp/cirmax-rs.log";
 
     // Build a stderr logger.
     let stderr = ConsoleAppender::builder().target(Target::Stderr).build();
@@ -113,7 +132,7 @@ fn main() {
 
     // Build the window
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![login, log])
+        .invoke_handler(tauri::generate_handler![login, log, get_empresa_by_id])
         .menu(Menu::with_items([
             MenuItem::SelectAll.into(),
             Submenu::new(

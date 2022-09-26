@@ -9,6 +9,9 @@ export default function Config() {
 	const [showPresupuesto, setShowPresupuestos] = createSignal(false);
 	const [showFactura, setShowFactura] = createSignal(false);
 
+	// eslint-disable-next-line prefer-const
+	let buttonRef: HTMLButtonElement | undefined;
+
 	const handleEditing = () => {
 		setIsEditing(true);
 	};
@@ -43,7 +46,7 @@ export default function Config() {
 				<div class='rounded-b-lg border-x-2 border-b-2 p-2'>
 					<Switch>
 						<Match when={showEmpresa()}>
-							<Empresa isEditing={isEditing()} />
+							<Empresa isEditing={isEditing()} ref={buttonRef}/>
 						</Match>
 					</Switch>
 				</div>

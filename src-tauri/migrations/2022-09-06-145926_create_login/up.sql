@@ -9,3 +9,13 @@ CREATE TABLE usuarios (
   estado CHAR(1) NOT NULL,
   fecha DATE NOT NULL
 );
+
+INSERT INTO usuarios (nombre, contrasenia, nombre_completo, pal_paso, clase, estado, fecha) VALUES (
+  'aitor', 
+	'$2a$12$sUtcztxbwpkPnk5.B5lv7uv9hfhofX7FEyzfomQlzfz9MNSylokpu',
+	'Aitor Ruiz',
+	'paso',
+	'C',
+	'B',
+	'2008-11-11'
+);
